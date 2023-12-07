@@ -12,7 +12,7 @@ class Ingredient(models.Model):
 
 class RecipeQuerySet(models.QuerySet):
     def custom_count(self, user_id):
-        self.count()
+        return self.count()
 
 
 class Recipe(models.Model):
