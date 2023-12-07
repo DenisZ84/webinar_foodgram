@@ -38,6 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
+    'drf_spectacular',
+    'djoser',
+    'django_filters',
     'recipes',
     'users',
 ]
@@ -138,20 +142,18 @@ AUTH_USER_MODEL = 'users.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        'rest_framework.permissions.AllowAny',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ],
-    # 'DEFAULT_PAGINATION_CLASS': 'recipes.pagination.CustomPageNumberPagination',
-    # Студенты часто пишут тут такую строку, если пагинация в settings,
-    # то в тегах и ингредиентах её нужно выключать.
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_PAGINATION_CLASS': 'recipes.pagination.CustomPageNumberPagination',
 }
 
 DJOSER = {
     'LOGIN_FIELD': 'email',
     'SERIALIZERS': {
-        # Часто тут прописывают еще и create_user - он не нужен.
         'user': 'users.serializers.ProfileSerializers',
         'current_user': 'users.serializers.ProfileSerializers',
     },
@@ -162,3 +164,39 @@ DJOSER = {
     'HIDE_USERS': False,
 }
 INTERNAL_IPS = ['127.0.0.1', ]
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Webinar Foodgram',
+    'DESCRIPTION': 'Разбор дипломного проекта',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
+}
+CORS_ALLOWED_ORIGINS = [
+    '*'
+]
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "DEBUG",
+        "formatter": "verbose",
+    },
+}
